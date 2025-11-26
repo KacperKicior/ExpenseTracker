@@ -13,4 +13,5 @@ urlpatterns = [
     path('categories/', views.category_list, name='category_list'),
     path('categories/add/', views.category_create, name='category_add'),
     path('settings/', views.profile_settings, name='profile_settings'),
+    path('accounts/register/', views.register, name='register'),
 ]

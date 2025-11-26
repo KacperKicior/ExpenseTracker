@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.views.decorators.cache import never_cache
 
 from .models import Expense, Category, UserProfile
-from .forms import ExpenseForm, CategoryForm, UserProfileForm
+from .forms import ExpenseForm, CategoryForm, UserProfileForm, UserRegistrationForm
 
 from django.db.models.functions import TruncMonth
 import json
@@ -219,3 +219,24 @@ def profile_settings(request):
         form = UserProfileForm(instance=profile)
 
     return render(request, "expenses/profile_settings.html", {"form": form})
+
+
+from django.contrib.auth import login
+
+@never_cache
+def register(request):
+    if request.user.is_authenticated:
+        return redirect("expenses:dashboard")
+
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, "Account created successfully. We will take you to your dashboard.")
+            login(request, user)
+            return redirect("expenses:dashboard")
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, "registration/register.html", {"form": form})
+
