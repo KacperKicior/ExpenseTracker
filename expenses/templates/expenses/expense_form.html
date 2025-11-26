@@ -1,11 +1,70 @@
 {% extends "base.html" %}
-{% block content %}
-<h1>{% if form.instance.pk %}Edit expense{% else %}Add expense{% endif %}</h1>
+{% block title %}{% if form.instance.pk %}Edit expense{% else %}Add expense{% endif %} · Expense Tracker{% endblock %}
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Save</button>
-  <a href="{% url 'expenses:expense_list' %}" class="btn btn-secondary">Cancel</a>
-</form>
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 mb-md-4 gap-2">
+  <div>
+    <div class="page-title">
+      {% if form.instance.pk %}Edit expense{% else %}Add expense{% endif %}
+    </div>
+    <div class="page-subtitle">
+      {% if form.instance.pk %}
+        Update the details of your expense.
+      {% else %}
+        Log a new expense in your tracker.
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="card card-glass p-3 p-md-4">
+  <form method="post" class="row g-3">
+    {% csrf_token %}
+
+    <div class="col-12">
+      <label class="form-label mb-1 small text-uppercase text-secondary">
+        Category
+      </label>
+      {{ form.category }}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label mb-1 small text-uppercase text-secondary">
+        Amount ({{ USER_CURRENCY_SYMBOL }})
+      </label>
+      {{ form.amount }}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label mb-1 small text-uppercase text-secondary">
+        Date
+      </label>
+      {{ form.date }}
+    </div>
+
+    <div class="col-12">
+      <label class="form-label mb-1 small text-uppercase text-secondary">
+        Description
+      </label>
+      {{ form.description }}
+    </div>
+
+    {% if form.errors %}
+      <div class="col-12">
+        <div class="alert alert-modern py-2 px-3">
+          Please fix the errors above and try again.
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="col-12 d-flex flex-wrap gap-2 mt-2">
+      <button type="submit" class="btn btn-primary">
+        Save
+      </button>
+      <a href="{% url 'expenses:expense_list' %}" class="btn btn-outline-secondary">
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>
 {% endblock %}

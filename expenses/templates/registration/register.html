@@ -1,11 +1,83 @@
 {% extends "base.html" %}
-{% block content %}
-<h1>Register</h1>
 
-<form method="post" class="mt-3">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Register</button>
-  <a href="{% url 'login' %}" class="btn btn-secondary">Cancel</a>
-</form>
+{% block extra_head %}
+<style>
+  .auth-field input{
+      float: right;
+  }
+</style>
+{% endblock %}
+
+{% block title %}Register · Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center mt-4">
+  <div class="card card-glass p-4" style="max-width: 460px; width: 100%;">
+    <div class="mb-3 text-center">
+      <div class="page-title mb-1">Create account</div>
+      <div class="page-subtitle">
+        Join and start tracking your expenses in seconds.
+      </div>
+    </div>
+
+    <form method="post" class="row g-3">
+      {% csrf_token %}
+
+      <div class="col-12">
+        <label class="form-label mb-1 small text-uppercase text-secondary">
+          Username
+        </label>
+        <span class="auth-field">
+          {{ form.username }}
+        </span>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label mb-1 small text-uppercase text-secondary">
+          Email
+        </label>
+        <span class="auth-field">
+          {{ form.email }}
+        </span>
+
+      </div>
+
+      <div class="col-12">
+        <label class="form-label mb-1 small text-uppercase text-secondary">
+          Password
+        </label>
+        <span class="auth-field">
+          {{ form.password1 }}
+        </span>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label mb-1 small text-uppercase text-secondary">
+          Confirm password
+        </label>
+        <span class="auth-field">
+          {{ form.password2 }}
+        </span>
+      </div>
+
+      {% if form.errors %}
+        <div class="col-12">
+          <div class="alert alert-modern py-2 px-3">
+            Please fix the highlighted fields and try again.
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="col-12 d-flex flex-column gap-2 mt-2">
+        <button type="submit" class="btn btn-primary w-100">
+          Register
+        </button>
+        <div class="text-center page-subtitle mt-1">
+          Already have an account?
+          <a href="{% url 'login' %}">Log in</a>.
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}

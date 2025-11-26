@@ -1,27 +1,65 @@
 {% extends "base.html" %}
-{% block content %}
-<h1>Categories</h1>
+{% block title %}Categories · Expense Tracker{% endblock %}
 
-<div class="mb-3">
-  <a href="{% url 'expenses:category_add' %}" class="btn btn-primary">Add category</a>
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 mb-md-4 gap-2">
+  <div>
+    <div class="page-title">Categories</div>
+    <div class="page-subtitle">
+      Organize your expenses by type and keep your reports clean.
+    </div>
+  </div>
+  <div class="d-flex flex-wrap gap-2">
+    <a href="{% url 'expenses:category_add' %}" class="btn btn-primary btn-sm">
+      + Add category
+    </a>
+  </div>
 </div>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for category in categories %}
-    <tr>
-      <td>{{ category.name }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td>No categories yet.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="card card-glass p-3">
+  <div class="d-flex justify-content-between align-items-center card-glass-header">
+    <span class="metric-label">Your categories</span>
+    <span class="badge-soft">
+      {% if categories|length == 1 %}
+        1 category
+      {% else %}
+        {{ categories|length }} categories
+      {% endif %}
+    </span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-modern align-middle mb-0">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th class="text-end">Expenses</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for category in categories %}
+        <tr>
+          <td>{{ category.name }}</td>
+          <td class="text-end">
+            {% if category.expense_count %}
+              {{ category.expense_count }}
+            {% else %}
+              <span class="text-secondary">0</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="2" class="text-center text-muted py-4">
+            You haven't created any categories yet.<br>
+            <a href="{% url 'expenses:category_add' %}" class="btn btn-primary btn-sm mt-3">
+              Add your first category
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
 
@@ -18,20 +18,27 @@ from django.contrib import messages
 @never_cache
 @login_required
 def dashboard(request):
-    today = timezone.now().date()
-    start_of_month = today.replace(day=1)
+    today = timezone.localdate()
 
     has_expenses = Expense.objects.filter(user=request.user).exists()
 
-    total_all = Expense.objects.filter(user=request.user).aggregate(
-        Sum('amount')
-    )['amount__sum'] or 0
+    total_all = (
+        Expense.objects
+        .filter(user=request.user)
+        .aggregate(Sum('amount'))['amount__sum']
+        or 0
+    )
 
-    total_this_month = Expense.objects.filter(
-        user=request.user,
-        date__gte=start_of_month,
-        date__lte=today
-    ).aggregate(Sum('amount'))['amount__sum'] or 0
+    total_this_month = (
+        Expense.objects
+        .filter(
+            user=request.user,
+            date__year=today.year,
+            date__month=today.month,
+        )
+        .aggregate(Sum('amount'))['amount__sum']
+        or 0
+    )
 
     by_category_qs = (
         Expense.objects.filter(user=request.user)
@@ -147,8 +154,14 @@ def expense_delete(request, pk):
 @never_cache
 @login_required
 def category_list(request):
-    categories = Category.objects.filter(user=request.user)
+    categories = (
+        Category.objects
+        .filter(user=request.user)
+        .annotate(expense_count=Count('expense'))
+        .order_by('name')
+    )
     return render(request, 'expenses/category_list.html', {'categories': categories})
+
 
 
 @login_required
