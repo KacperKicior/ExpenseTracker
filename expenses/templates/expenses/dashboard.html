@@ -7,7 +7,7 @@
     <div class="card">
       <div class="card-body">
         <h5>Total (all time)</h5>
-        <p class="fs-3">{{ total_all|floatformat:2 }}</p>
+        <p class="fs-3">{{ total_all|floatformat:2 }} {{ USER_CURRENCY_SYMBOL }}</p>
       </div>
     </div>
   </div>
@@ -15,7 +15,7 @@
     <div class="card">
       <div class="card-body">
         <h5>Total (this month)</h5>
-        <p class="fs-3">{{ total_this_month|floatformat:2 }}</p>
+        <p class="fs-3">{{ total_this_month|floatformat:2 }} {{ USER_CURRENCY_SYMBOL }}</p>
       </div>
     </div>
   </div>
@@ -33,7 +33,7 @@
     {% for row in by_category %}
     <tr>
       <td>{{ row.category__name|default:"(No category)" }}</td>
-      <td>{{ row.total|floatformat:2 }}</td>
+      <td>{{ row.total|floatformat:2 }} {{ USER_CURRENCY_SYMBOL }}</td>
     </tr>
     {% empty %}
     <tr>
@@ -68,6 +68,7 @@
   const categoryTotals = {{ category_totals_json|safe }};
   const monthlyLabels = {{ monthly_labels_json|safe }};
   const monthlyTotals = {{ monthly_totals_json|safe }};
+  const currencySymbol = "{{ USER_CURRENCY_SYMBOL|escapejs }}";
 
   // Category pie chart
   const ctxCategory = document.getElementById('categoryChart');
@@ -77,11 +78,26 @@
       data: {
         labels: categoryLabels,
         datasets: [{
+          label: 'Expenses by category',
           data: categoryTotals
         }]
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const label = context.label || '';
+                const value = Number(context.parsed) || 0;
+                return `${label}: ${value.toFixed(2)} ${currencySymbol}`;
+              }
+            }
+          }
+        }
       }
     });
   }
+
 
   // Monthly bar chart
   const ctxMonthly = document.getElementById('monthlyChart');
@@ -91,16 +107,31 @@
       data: {
         labels: monthlyLabels,
         datasets: [{
+          label: `Expenses by month (${currencySymbol})`,
           data: monthlyTotals
         }]
       },
       options: {
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                const num = Number(value) || 0;
+                return num.toFixed(2) + ' ' + currencySymbol;
+              }
+            }
           }
         },
-        plugins:{
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = Number(context.parsed.y) || 0;
+                return `${context.label}: ${value.toFixed(2)} ${currencySymbol}`;
+              }
+            }
+          },
           legend:{
             display: false
           }
@@ -109,4 +140,5 @@
     });
   }
 </script>
+
 {% endblock %}

@@ -51,7 +51,7 @@
       <td>{{ expense.date }}</td>
       <td>{{ expense.category|default:"(No category)" }}</td>
       <td>{{ expense.description }}</td>
-      <td>{{ expense.amount|floatformat:2 }}</td>
+      <td>{{ expense.amount|floatformat:2 }} {{ USER_CURRENCY_SYMBOL }}</td>
       <td>
         <a href="{% url 'expenses:expense_edit' expense.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
         <a href="{% url 'expenses:expense_delete' expense.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>

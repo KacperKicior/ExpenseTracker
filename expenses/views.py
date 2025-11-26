@@ -3,14 +3,16 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.utils import timezone
 
-from .models import Expense, Category
-from .forms import ExpenseForm, CategoryForm
+from .models import Expense, Category, UserProfile
+from .forms import ExpenseForm, CategoryForm, UserProfileForm
 
 from django.db.models.functions import TruncMonth
 import json
 
 from django.http import HttpResponse
 import csv
+
+from django.contrib import messages
 
 @login_required
 def dashboard(request):
@@ -196,3 +198,19 @@ def export_expenses_csv(request):
         ])
 
     return response
+
+
+@login_required
+def profile_settings(request):
+    profile = request.user.profile
+
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Settings saved.")
+            return redirect("expenses:dashboard")
+    else:
+        form = UserProfileForm(instance=profile)
+
+    return render(request, "expenses/profile_settings.html", {"form": form})
