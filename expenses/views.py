@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.utils import timezone
+from django.views.decorators.cache import never_cache
 
 from .models import Expense, Category, UserProfile
 from .forms import ExpenseForm, CategoryForm, UserProfileForm
@@ -14,6 +15,7 @@ import csv
 
 from django.contrib import messages
 
+@never_cache
 @login_required
 def dashboard(request):
     today = timezone.now().date()
@@ -78,6 +80,7 @@ def dashboard(request):
 
 from django.core.paginator import Paginator
 
+@never_cache
 @login_required
 def expense_list(request):
     expenses = Expense.objects.filter(user=request.user)
@@ -145,6 +148,7 @@ def expense_delete(request, pk):
     return render(request, 'expenses/expense_confirm_delete.html', {'expense': expense})
 
 
+@never_cache
 @login_required
 def category_list(request):
     categories = Category.objects.filter(user=request.user)
@@ -200,6 +204,7 @@ def export_expenses_csv(request):
     return response
 
 
+@never_cache
 @login_required
 def profile_settings(request):
     profile = request.user.profile

@@ -23,7 +23,15 @@
           <li class="nav-item"><span class="nav-link">Hello, {{ user.username }}</span></li>
           <li class="nav-item"><span class="nav-link">Your currency: {{ USER_CURRENCY }}</span></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'expenses:profile_settings' %}">Settings</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+          <li class="nav-item">
+              <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="nav-link">
+                  Logout
+                </button>
+              </form>
+          </li>
+
         {% else %}
           <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
         {% endif %}
