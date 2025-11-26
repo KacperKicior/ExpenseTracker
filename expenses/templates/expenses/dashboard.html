@@ -2,6 +2,25 @@
 {% block content %}
 <h1>Dashboard</h1>
 
+{% if not has_expenses %}
+<div class="alert alert-info" role="alert">
+  <h4 class="alert-heading">Welcome, {{ user.username }}!</h4>
+  <p>
+    You don't have any expenses yet.
+  </p>
+  <hr>
+  <p class="mb-0">
+    <a href="{% url 'expenses:expense_add' %}" class="btn btn-primary btn-sm">
+      Add your first expense
+    </a>
+    <a href="{% url 'expenses:category_list' %}" class="btn btn-outline-secondary btn-sm ms-2">
+      Manage categories
+    </a>
+  </p>
+</div>
+{% endif %}
+
+
 <div class="row mb-4">
   <div class="col-md-6">
     <div class="card">
