@@ -6,11 +6,15 @@ from django.utils import timezone
 from .models import Expense, Category
 from .forms import ExpenseForm, CategoryForm
 
+from django.db.models.functions import TruncMonth
+import json
+
 @login_required
 def dashboard(request):
     today = timezone.now().date()
     start_of_month = today.replace(day=1)
 
+    # Basic totals
     total_all = Expense.objects.filter(user=request.user).aggregate(
         Sum('amount')
     )['amount__sum'] or 0
@@ -21,19 +25,50 @@ def dashboard(request):
         date__lte=today
     ).aggregate(Sum('amount'))['amount__sum'] or 0
 
-    by_category = (
+    # Top categories
+    by_category_qs = (
         Expense.objects.filter(user=request.user)
         .values('category__name')
         .annotate(total=Sum('amount'))
-        .order_by('-total')[:5]
+        .order_by('-total')
     )
+
+    # Data for category pie chart
+    category_labels = []
+    category_totals = []
+    for row in by_category_qs:
+        category_labels.append(row['category__name'] or "(No category)")
+        category_totals.append(float(row['total']))
+
+    # Data for monthly bar chart (last 6 months)
+    monthly_qs = (
+        Expense.objects.filter(user=request.user)
+        .annotate(month=TruncMonth('date'))
+        .values('month')
+        .annotate(total=Sum('amount'))
+        .order_by('month')
+    )
+
+    monthly_labels = []
+    monthly_totals = []
+    for row in monthly_qs:
+        if row['month']:
+            monthly_labels.append(row['month'].strftime('%Y-%m'))
+            monthly_totals.append(float(row['total']))
 
     context = {
         'total_all': total_all,
         'total_this_month': total_this_month,
-        'by_category': by_category,
+        'by_category': by_category_qs[:5],
+
+        # JSON for Chart.js
+        'category_labels_json': json.dumps(category_labels),
+        'category_totals_json': json.dumps(category_totals),
+        'monthly_labels_json': json.dumps(monthly_labels),
+        'monthly_totals_json': json.dumps(monthly_totals),
     }
     return render(request, 'expenses/dashboard.html', context)
+
 
 
 from django.core.paginator import Paginator

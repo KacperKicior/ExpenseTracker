@@ -22,7 +22,7 @@
 </div>
 
 <h3>Top categories</h3>
-<table class="table table-striped">
+<table class="table table-striped mb-4">
   <thead>
     <tr>
       <th>Category</th>
@@ -42,4 +42,66 @@
     {% endfor %}
   </tbody>
 </table>
+
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5>Expenses by category</h5>
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5>Expenses by month</h5>
+        <canvas id="monthlyChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const categoryLabels = {{ category_labels_json|safe }};
+  const categoryTotals = {{ category_totals_json|safe }};
+  const monthlyLabels = {{ monthly_labels_json|safe }};
+  const monthlyTotals = {{ monthly_totals_json|safe }};
+
+  // Category pie chart
+  const ctxCategory = document.getElementById('categoryChart');
+  if (ctxCategory && categoryLabels.length > 0) {
+    new Chart(ctxCategory, {
+      type: 'pie',
+      data: {
+        labels: categoryLabels,
+        datasets: [{
+          data: categoryTotals
+        }]
+      }
+    });
+  }
+
+  // Monthly bar chart
+  const ctxMonthly = document.getElementById('monthlyChart');
+  if (ctxMonthly && monthlyLabels.length > 0) {
+    new Chart(ctxMonthly, {
+      type: 'bar',
+      data: {
+        labels: monthlyLabels,
+        datasets: [{
+          data: monthlyTotals
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+</script>
 {% endblock %}
