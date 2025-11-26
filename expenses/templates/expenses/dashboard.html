@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Dashboard</h1>
+
+<div class="row mb-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5>Total (all time)</h5>
+        <p class="fs-3">{{ total_all }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5>Total (this month)</h5>
+        <p class="fs-3">{{ total_this_month }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Top categories</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in by_category %}
+    <tr>
+      <td>{{ row.category__name|default:"(No category)" }}</td>
+      <td>{{ row.total }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="2">No expenses yet.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

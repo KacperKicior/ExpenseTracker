@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Categories</h1>
+
+<div class="mb-3">
+  <a href="{% url 'expenses:category_add' %}" class="btn btn-primary">Add category</a>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for category in categories %}
+    <tr>
+      <td>{{ category.name }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td>No categories yet.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{% if form.instance.pk %}Edit expense{% else %}Add expense{% endif %}</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Save</button>
+  <a href="{% url 'expenses:expense_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
