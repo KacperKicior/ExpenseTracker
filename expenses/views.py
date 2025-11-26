@@ -9,6 +9,9 @@ from .forms import ExpenseForm, CategoryForm
 from django.db.models.functions import TruncMonth
 import json
 
+from django.http import HttpResponse
+import csv
+
 @login_required
 def dashboard(request):
     today = timezone.now().date()
@@ -158,3 +161,38 @@ def category_create(request):
     else:
         form = CategoryForm()
     return render(request, 'expenses/category_form.html', {'form': form})
+
+
+@login_required
+def export_expenses_csv(request):
+    expenses = Expense.objects.filter(user=request.user).order_by('date')
+
+    category_id = request.GET.get('category')
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+
+    # treat empty string / “None” as no filter
+    if category_id and category_id != 'None':
+        expenses = expenses.filter(category_id=category_id)
+
+    if date_from and date_from != 'None':
+        expenses = expenses.filter(date__gte=date_from)
+
+    if date_to and date_to != 'None':
+        expenses = expenses.filter(date__lte=date_to)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="expenses.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Date', 'Category', 'Description', 'Amount'])
+
+    for e in expenses:
+        writer.writerow([
+            e.date,
+            e.category.name if e.category else '',
+            e.description,
+            e.amount,
+        ])
+
+    return response

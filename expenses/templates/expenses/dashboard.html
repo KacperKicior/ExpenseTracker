@@ -7,7 +7,7 @@
     <div class="card">
       <div class="card-body">
         <h5>Total (all time)</h5>
-        <p class="fs-3">{{ total_all }}</p>
+        <p class="fs-3">{{ total_all|floatformat:2 }}</p>
       </div>
     </div>
   </div>
@@ -15,7 +15,7 @@
     <div class="card">
       <div class="card-body">
         <h5>Total (this month)</h5>
-        <p class="fs-3">{{ total_this_month }}</p>
+        <p class="fs-3">{{ total_this_month|floatformat:2 }}</p>
       </div>
     </div>
   </div>
@@ -33,7 +33,7 @@
     {% for row in by_category %}
     <tr>
       <td>{{ row.category__name|default:"(No category)" }}</td>
-      <td>{{ row.total }}</td>
+      <td>{{ row.total|floatformat:2 }}</td>
     </tr>
     {% empty %}
     <tr>
@@ -98,6 +98,11 @@
         scales: {
           y: {
             beginAtZero: true
+          }
+        },
+        plugins:{
+          legend:{
+            display: false
           }
         }
       }

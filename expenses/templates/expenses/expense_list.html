@@ -4,6 +4,13 @@
 
 <div class="mb-3">
   <a href="{% url 'expenses:expense_add' %}" class="btn btn-primary">Add expense</a>
+  <a
+    href="{% url 'expenses:expense_export_csv' %}?{{ request.GET.urlencode }}"
+    class="btn btn-outline-success"
+  >
+  Export CSV
+</a>
+
 </div>
 
 <form method="get" class="row g-2 mb-3">
@@ -44,7 +51,7 @@
       <td>{{ expense.date }}</td>
       <td>{{ expense.category|default:"(No category)" }}</td>
       <td>{{ expense.description }}</td>
-      <td>{{ expense.amount }}</td>
+      <td>{{ expense.amount|floatformat:2 }}</td>
       <td>
         <a href="{% url 'expenses:expense_edit' expense.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
         <a href="{% url 'expenses:expense_delete' expense.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
