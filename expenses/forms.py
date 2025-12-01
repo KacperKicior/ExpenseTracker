@@ -22,7 +22,7 @@ class CategoryForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['currency']
+        fields = ['currency', 'language']
 
 
 class UserRegistrationForm(UserCreationForm):

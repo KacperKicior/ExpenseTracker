@@ -1,11 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 CURRENCY_CHOICES = [
     ("PLN", "Polish Złoty"),
     ("EUR", "Euro"),
     ("USD", "US Dollar"),
     ("GBP", "British Pound"),
+]
+
+LANGUAGE_CHOICES = [
+    ("pl", _("Polish")),
+    ("en", _("English")),
+    ("de", _("German")),
 ]
 
 CURRENCY_SYMBOLS = {
@@ -19,6 +26,7 @@ CURRENCY_SYMBOLS = {
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default="PLN")
+    language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default="pl")
 
     def __str__(self):
         return f"Profile of {self.user.username}"

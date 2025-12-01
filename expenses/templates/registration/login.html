@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load i18n %}
+
 {% block extra_head %}
 <style>
   span textarea{
@@ -7,15 +9,15 @@
 </style>
 {% endblock %}
 
-{% block title %}Login · Expense Tracker{% endblock %}
+{% block title %}{% trans "Login" %} · Expense Tracker{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-center mt-4">
-  <div class="card card-glass p-4" style="max-width: 420px; width: 100%;">
+  <div class="card card-glass p-4" style="max-width: 460px; width: 100%;">
     <div class="mb-3 text-center">
-      <div class="page-title mb-1">Welcome back</div>
+      <div class="page-title mb-1">{% trans "Welcome back" %}</div>
       <div class="page-subtitle">
-        Sign in to access your expenses dashboard.
+        {% trans "Sign in to access your expenses dashboard." %}
       </div>
     </div>
 
@@ -24,7 +26,7 @@
 
       <div class="col-12">
         <label class="form-label mb-1 small text-uppercase text-secondary">
-          Username
+          {% trans "Username" %}
         </label>
         <span class="auth-field">
           {{ form.username }}
@@ -33,7 +35,7 @@
 
       <div class="col-12">
         <label class="form-label mb-1 small text-uppercase text-secondary">
-          Password
+          {% trans "Password" %}
         </label>
         <span class="auth-field">
           {{ form.password }}
@@ -43,18 +45,18 @@
       {% if form.errors %}
         <div class="col-12">
           <div class="alert alert-modern py-2 px-3">
-            Invalid username or password. Please try again.
+            {% trans "Invalid username or password. Please try again." %}
           </div>
         </div>
       {% endif %}
 
       <div class="col-12 d-flex flex-column gap-2 mt-2">
         <button type="submit" class="btn btn-primary w-100">
-          Login
+          {% trans "Login" %}
         </button>
         <div class="text-center page-subtitle mt-1">
-          Don't have an account?
-          <a href="{% url 'expenses:register' %}">Register here</a>.
+          {% trans "Don't have an account?" %}
+          <a href="{% url 'expenses:register' %}">{% trans "Register here" %}</a>.
         </div>
       </div>
     </form>

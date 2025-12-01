@@ -1,12 +1,14 @@
 {% extends "base.html" %}
+{% load i18n %}
+
 {% block title %}Settings · Expense Tracker{% endblock %}
 
 {% block content %}
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 mb-md-4 gap-2">
   <div>
-    <div class="page-title">Settings</div>
+    <div class="page-title">{% trans "Settings" %}</div>
     <div class="page-subtitle">
-      Personalize your experience and default currency.
+      {% trans "Personalize your experience and default currency." %}
     </div>
   </div>
 </div>
@@ -17,28 +19,38 @@
 
     <div class="col-12 col-md-6">
       <label class="form-label mb-1 small text-uppercase text-secondary">
-        Default currency
+        {% trans "Default currency" %}
       </label>
       {{ form.currency }}
       <div class="form-text text-secondary mt-1">
-        All amounts will be displayed using this currency symbol.
+        {% trans "All amounts will be displayed using this currency symbol." %}
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <label class="form-label mb-1 small text-uppercase text-secondary">
+        {% trans "Language" %}
+      </label>
+    {{ form.language }}
+      <div class="form-text text-secondary mt-1">
+        {% trans "Interface language for your account." %}
       </div>
     </div>
 
     {% if form.errors %}
       <div class="col-12">
         <div class="alert alert-modern py-2 px-3">
-          Please fix the errors above and try again.
+          {% trans "Please fix the errors above and try again." %}
         </div>
       </div>
     {% endif %}
 
     <div class="col-12 d-flex flex-wrap gap-2 mt-2">
       <button type="submit" class="btn btn-primary">
-        Save
+        {% trans "Save" %}
       </button>
       <a href="{% url 'expenses:dashboard' %}" class="btn btn-outline-secondary">
-        Cancel
+        {% trans "Cancel" %}
       </a>
     </div>
   </form>

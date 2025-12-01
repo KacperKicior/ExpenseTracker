@@ -1,29 +1,31 @@
 {% extends "base.html" %}
-{% block title %}Categories · Expense Tracker{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Categories" %} · Expense Tracker{% endblock %}
 
 {% block content %}
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 mb-md-4 gap-2">
   <div>
-    <div class="page-title">Categories</div>
+    <div class="page-title">{% trans "Categories" %}</div>
     <div class="page-subtitle">
-      Organize your expenses by type and keep your reports clean.
+      {% trans "Organize your expenses by type and keep your reports clean." %}
     </div>
   </div>
   <div class="d-flex flex-wrap gap-2">
     <a href="{% url 'expenses:category_add' %}" class="btn btn-primary btn-sm">
-      + Add category
+      {% trans "+ Add category" %}
     </a>
   </div>
 </div>
 
 <div class="card card-glass p-3">
   <div class="d-flex justify-content-between align-items-center card-glass-header">
-    <span class="metric-label">Your categories</span>
+    <span class="metric-label">{% trans "Your categories" %}</span>
     <span class="badge-soft">
       {% if categories|length == 1 %}
-        1 category
+        1 {% trans "category" %}
       {% else %}
-        {{ categories|length }} categories
+        {{ categories|length }} {% trans "categories" %}
       {% endif %}
     </span>
   </div>
@@ -32,8 +34,8 @@
     <table class="table table-modern align-middle mb-0">
       <thead>
       <tr>
-        <th>Name</th>
-        <th class="text-end">Expenses</th>
+        <th>{% trans "Name" %}</th>
+        <th class="text-end">{% trans "Expenses" %}</th>
       </tr>
       </thead>
       <tbody>
@@ -51,9 +53,9 @@
       {% empty %}
         <tr>
           <td colspan="2" class="text-center text-muted py-4">
-            You haven't created any categories yet.<br>
+            {% trans "You haven't created any categories yet." %}<br>
             <a href="{% url 'expenses:category_add' %}" class="btn btn-primary btn-sm mt-3">
-              Add your first category
+              {% trans "Add your first category" %}
             </a>
           </td>
         </tr>

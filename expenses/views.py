@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
+from django.utils.translation import gettext as _
 
 from .models import Expense, Category, UserProfile
 from .forms import ExpenseForm, CategoryForm, UserProfileForm, UserRegistrationForm
@@ -186,7 +187,6 @@ def export_expenses_csv(request):
     date_from = request.GET.get('date_from')
     date_to = request.GET.get('date_to')
 
-    # treat empty string / “None” as no filter
     if category_id and category_id != 'None':
         expenses = expenses.filter(category_id=category_id)
 
@@ -222,7 +222,7 @@ def profile_settings(request):
         form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-            messages.success(request, "Settings saved.")
+            messages.success(request, _("Settings saved."))
             return redirect("expenses:dashboard")
     else:
         form = UserProfileForm(instance=profile)
@@ -231,6 +231,7 @@ def profile_settings(request):
 
 
 from django.contrib.auth import login
+
 
 @never_cache
 def register(request):
@@ -241,7 +242,7 @@ def register(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            messages.success(request, "Account created successfully. We will take you to your dashboard.")
+            messages.success(request, _("Account created successfully. We will take you to your dashboard."))
             login(request, user)
             return redirect("expenses:dashboard")
     else:

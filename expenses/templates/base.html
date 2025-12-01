@@ -369,6 +369,7 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
+{% load i18n %}
 <div class="app-shell">
     <nav class="navbar navbar-expand-lg navbar-glass">
         <div class="container app-container">
@@ -386,15 +387,15 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
-                               href="{% url 'expenses:dashboard' %}">Dashboard</a>
+                               href="{% url 'expenses:dashboard' %}">{% trans "Dashboard" %}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if 'expense' in request.resolver_match.url_name %}active{% endif %}"
-                               href="{% url 'expenses:expense_list' %}">Expenses</a>
+                               href="{% url 'expenses:expense_list' %}">{% trans "Expenses" %}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if 'category' in request.resolver_match.url_name %}active{% endif %}"
-                               href="{% url 'expenses:category_list' %}">Categories</a>
+                               href="{% url 'expenses:category_list' %}">{% trans "Categories" %}</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -403,11 +404,11 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item d-none d-md-block">
                             <span class="nav-pill">
-                                {{ USER_CURRENCY_SYMBOL }} <span>{{ USER_CURRENCY }}</span>
+                                {{ USER_CURRENCY_SYMBOL }} <span>{{ USER_CURRENCY }}</span> · {{ request.LANGUAGE_CODE|upper }}
                             </span>
                         </li>
                         <li class="nav-item d-none d-md-block">
-                            <a class="nav-link" href="{% url 'expenses:profile_settings' %}">Settings</a>
+                            <a class="nav-link" href="{% url 'expenses:profile_settings' %}">{% trans "Settings" %}</a>
                         </li>
                         <li class="nav-item d-none d-md-block">
                             <span class="nav-link disabled" style="opacity: 0.8;">
@@ -418,16 +419,16 @@
                             <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
                                 <button type="submit" class="nav-link btn btn-link p-0 m-0">
-                                    Logout
+                                    {% trans "Logout" %}
                                 </button>
                             </form>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            <a class="nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'expenses:register' %}">Register</a>
+                            <a class="nav-link" href="{% url 'expenses:register' %}">{% trans "Register" %}</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -455,7 +456,7 @@
             <span>Expense Tracker · {{ USER_CURRENCY_SYMBOL }} {{ USER_CURRENCY }}</span>
         </div>
         <div class="container app-container">
-            <span>Application made by Kacper Kicior</span>
+            <span>{% trans "Application made by" %} Kacper Kicior</span>
         </div>
     </footer>
 </div>

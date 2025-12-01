@@ -1,44 +1,46 @@
 {% extends "base.html" %}
-{% block title %}Expenses · Expense Tracker{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Expenses" %} · Expense Tracker{% endblock %}
 
 {% block content %}
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 mb-md-4 gap-2">
   <div>
-    <div class="page-title">Expenses</div>
+    <div class="page-title">{% trans "Expenses" %}</div>
     <div class="page-subtitle">
-      Browse, filter and export your expense history.
+      {% trans "Browse, filter and export your expense history." %}
     </div>
   </div>
   <div class="d-flex flex-wrap gap-2">
     <a href="{% url 'expenses:expense_add' %}" class="btn btn-primary btn-sm">
-      + Add expense
+      {% trans "+ Add expense" %}
     </a>
     <a
       href="{% url 'expenses:expense_export_csv' %}?{{ request.GET.urlencode }}"
       class="btn btn-outline-secondary btn-sm"
     >
-      Export CSV
+      {% trans "Export CSV" %}
     </a>
   </div>
 </div>
 
 <div class="card card-glass p-3 mb-3">
   <div class="d-flex justify-content-between align-items-center card-glass-header">
-    <span class="metric-label">Filters</span>
+    <span class="metric-label">{% trans "Filters" %}</span>
     <button
       type="button"
       class="btn btn-sm btn-outline-secondary"
       onclick="window.location.href='{% url 'expenses:expense_list' %}'"
     >
-      Clear
+      {% trans "Clear" %}
     </button>
   </div>
 
   <form method="get" class="row g-2">
     <div class="col-md-4">
-      <label class="form-label mb-1 small text-uppercase text-secondary">Category</label>
+      <label class="form-label mb-1 small text-uppercase text-secondary">{% trans "Category" %}</label>
       <select name="category" class="form-select">
-        <option value="">All categories</option>
+        <option value="">{% trans "All categories" %}</option>
         {% for category in categories %}
           <option
             value="{{ category.id }}"
@@ -50,16 +52,16 @@
       </select>
     </div>
     <div class="col-md-3">
-      <label class="form-label mb-1 small text-uppercase text-secondary">From</label>
+      <label class="form-label mb-1 small text-uppercase text-secondary">{% trans "From" %}</label>
       <input type="date" name="date_from" class="form-control" value="{{ date_from }}">
     </div>
     <div class="col-md-3">
-      <label class="form-label mb-1 small text-uppercase text-secondary">To</label>
+      <label class="form-label mb-1 small text-uppercase text-secondary">{% trans "To" %}</label>
       <input type="date" name="date_to" class="form-control" value="{{ date_to }}">
     </div>
     <div class="col-md-2 d-flex align-items-end">
       <button type="submit" class="btn btn-primary w-100">
-        Apply
+        {% trans "Apply" %}
       </button>
     </div>
   </form>
@@ -70,11 +72,11 @@
     <table class="table table-modern table-striped align-middle mb-0">
       <thead>
       <tr>
-        <th>Date</th>
-        <th>Category</th>
-        <th>Description</th>
-        <th class="text-end">Amount</th>
-        <th class="text-end">Actions</th>
+        <th>{% trans "Date" %}</th>
+        <th>{% trans "Category" %}</th>
+        <th>{% trans "Description" %}</th>
+        <th class="text-end">{% trans "Amount" %}</th>
+        <th class="text-end">{% trans "Actions" %}</th>
       </tr>
       </thead>
       <tbody>
@@ -90,17 +92,17 @@
           </td>
           <td class="text-end">
             <a href="{% url 'expenses:expense_edit' expense.pk %}" class="btn btn-sm btn-outline-secondary me-1">
-              Edit
+              {% trans "Edit" %}
             </a>
             <a href="{% url 'expenses:expense_delete' expense.pk %}" class="btn btn-sm btn-outline-secondary">
-              Delete
+              {% trans "Delete" %}
             </a>
           </td>
         </tr>
       {% empty %}
         <tr>
           <td colspan="5" class="text-center py-4">
-            No expenses found. Try adjusting filters or add a new expense.
+            {% trans "No expenses found. Try adjusting filters or add a new expense." %}
           </td>
         </tr>
       {% endfor %}
@@ -115,7 +117,7 @@
         {% if expenses.has_previous %}
           <li class="page-item">
             <a class="page-link" href="?page={{ expenses.previous_page_number }}&{{ request.GET.urlencode|cut:'page='|safe }}">
-              ‹ Prev
+              ‹ {% trans "Prev" %}
             </a>
           </li>
         {% endif %}
@@ -127,7 +129,7 @@
         {% if expenses.has_next %}
           <li class="page-item">
             <a class="page-link" href="?page={{ expenses.next_page_number }}&{{ request.GET.urlencode|cut:'page='|safe }}">
-              Next ›
+              {% trans "Next" %} ›
             </a>
           </li>
         {% endif %}

@@ -1,12 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Add category · Expense Tracker{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Add category" %} · Expense Tracker{% endblock %}
 
 {% block content %}
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 mb-md-4 gap-2">
   <div>
-    <div class="page-title">Add category</div>
+    <div class="page-title">{% trans "Add category" %}</div>
     <div class="page-subtitle">
-      Create a category to better organize your expenses.
+      {% trans "Create a category to better organize your expenses." %}
     </div>
   </div>
 </div>
@@ -17,7 +18,7 @@
 
     <div class="col-12">
       <label class="form-label mb-1 small text-uppercase text-secondary">
-        Name
+        {% trans "Name" %}
       </label>
       {{ form.name }}
     </div>
@@ -25,17 +26,17 @@
     {% if form.errors %}
       <div class="col-12">
         <div class="alert alert-modern py-2 px-3">
-          Please fix the errors above and try again.
+          {% trans "Please fix the errors above and try again." %}
         </div>
       </div>
     {% endif %}
 
     <div class="col-12 d-flex flex-wrap gap-2 mt-2">
       <button type="submit" class="btn btn-primary">
-        Save
+        {% trans "Save" %}
       </button>
       <a href="{% url 'expenses:category_list' %}" class="btn btn-outline-secondary">
-        Cancel
+        {% trans "Cancel" %}
       </a>
     </div>
   </form>

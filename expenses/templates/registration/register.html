@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block extra_head %}
 <style>
   .auth-field input{
@@ -8,15 +10,15 @@
 </style>
 {% endblock %}
 
-{% block title %}Register · Expense Tracker{% endblock %}
+{% block title %}{% trans "Register" %} · Expense Tracker{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-center mt-4">
   <div class="card card-glass p-4" style="max-width: 460px; width: 100%;">
     <div class="mb-3 text-center">
-      <div class="page-title mb-1">Create account</div>
+      <div class="page-title mb-1">{% trans "Create account" %}</div>
       <div class="page-subtitle">
-        Join and start tracking your expenses in seconds.
+        {% trans "Join and start tracking your expenses in seconds." %}
       </div>
     </div>
 
@@ -25,7 +27,7 @@
 
       <div class="col-12">
         <label class="form-label mb-1 small text-uppercase text-secondary">
-          Username
+          {% trans "Username" %}
         </label>
         <span class="auth-field">
           {{ form.username }}
@@ -34,7 +36,7 @@
 
       <div class="col-12">
         <label class="form-label mb-1 small text-uppercase text-secondary">
-          Email
+          {% trans "Email" %}
         </label>
         <span class="auth-field">
           {{ form.email }}
@@ -44,7 +46,7 @@
 
       <div class="col-12">
         <label class="form-label mb-1 small text-uppercase text-secondary">
-          Password
+          {% trans "Password" %}
         </label>
         <span class="auth-field">
           {{ form.password1 }}
@@ -53,7 +55,7 @@
 
       <div class="col-12">
         <label class="form-label mb-1 small text-uppercase text-secondary">
-          Confirm password
+          {% trans "Confirm password" %}
         </label>
         <span class="auth-field">
           {{ form.password2 }}
@@ -63,18 +65,18 @@
       {% if form.errors %}
         <div class="col-12">
           <div class="alert alert-modern py-2 px-3">
-            Please fix the highlighted fields and try again.
+            {% trans "Please fix the highlighted fields and try again." %}
           </div>
         </div>
       {% endif %}
 
       <div class="col-12 d-flex flex-column gap-2 mt-2">
         <button type="submit" class="btn btn-primary w-100">
-          Register
+          {% trans "Register" %}
         </button>
         <div class="text-center page-subtitle mt-1">
-          Already have an account?
-          <a href="{% url 'login' %}">Log in</a>.
+          {% trans "Already have an account?" %}
+          <a href="{% url 'login' %}">{% trans "Log in" %}</a>.
         </div>
       </div>
     </form>
